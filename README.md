@@ -1,2 +1,2 @@
 # BTAGamePOO
-Game in java (beat them all)
+src.Game in java (beat them all)
