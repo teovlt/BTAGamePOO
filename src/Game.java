@@ -10,7 +10,7 @@ public class Game {
     private static void credits() {
         System.out.println("------------------------------------");
         System.out.println("|                                  |");
-        System.out.println("|  Jeu créé par Amani, Shayma et   |");
+        System.out.println("|  Jeu créé par Amani, Chayma et   |");
         System.out.println("|              Teo                 |");
         System.out.println("|                                  |");
         System.out.println("------------------------------------");
