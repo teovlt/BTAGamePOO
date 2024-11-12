@@ -7,14 +7,19 @@ public class Game {
         launchGame();
     }
 
-    private static void credits(){
-        //Afficher les crédits
+    private static void credits() {
+        System.out.println("------------------------------------");
+        System.out.println("|                                  |");
+        System.out.println("|  Jeu créé par Amani, Shayma et   |");
+        System.out.println("|              Teo                 |");
+        System.out.println("|                                  |");
+        System.out.println("------------------------------------");
     }
 
-    private static void launchGame(){
+    private static void launchGame() {
         //lancer la boucle du jeu
+        System.out.println("je lance le jeu");
     }
-
 
 
 }
