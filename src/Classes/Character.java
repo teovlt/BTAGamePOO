@@ -69,8 +69,8 @@ public abstract class Character {
      *
      * @return true si hp > 0, sinon false
      */
-    public boolean isAlive() {
-        return this.hp > 0;
+    public boolean isDead() {
+        return this.hp <= 0;
     }
 
     @Override
