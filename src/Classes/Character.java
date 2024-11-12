@@ -1,4 +1,4 @@
-package src;
+package src.Classes;
 
 /**
  * Classe abstraite représentant un personnage dans le jeu.
