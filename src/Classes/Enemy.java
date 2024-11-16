@@ -10,8 +10,8 @@ public class Enemy extends Character {
      * @param attack  la force d'attaque de l'ennemie
      * @param defense la défense de l'ennemi
      */
-    public Enemy(String name, int hp, int attack, int defense) {
-        super(name, hp, attack, defense);
+    public Enemy(String name, int hp, int attack, int defense, int speed) {
+        super(name, hp, attack, defense, speed);
     }
 
     @Override

@@ -8,6 +8,7 @@ public abstract class Character {
     private int hp;
     private int attack;
     private int defense;
+    private int speed;
 
     /**
      * Constructeur de la classe Character.
@@ -17,11 +18,12 @@ public abstract class Character {
      * @param attack  la force d'attaque du personnage
      * @param defense la défense du personnage
      */
-    public Character(String name, int hp, int attack, int defense) {
+    public Character(String name, int hp, int attack, int defense, int speed) {
         this.name = name;
         this.hp = hp;
         this.attack = attack;
         this.defense = defense;
+        this.speed = speed;
     }
 
     // Getters et Setters
@@ -57,6 +59,10 @@ public abstract class Character {
         this.defense = defense;
     }
 
+    public int getSpeed() {return speed;}
+
+    public void setSpeed(int speed) {this.speed = speed;}
+
     /**
      * Méthode abstraite pour attaquer un autre personnage.
      *
@@ -73,8 +79,9 @@ public abstract class Character {
         return this.hp <= 0;
     }
 
+
     @Override
     public String toString() {
-        return String.format("%s [HP: %d, Attack: %d, Defense: %d]", name, hp, attack, defense);
+        return String.format("%s [HP: %d, Attack: %d, Defense: %d, Speed : %d]", name, hp, attack, defense, speed);
     }
 }

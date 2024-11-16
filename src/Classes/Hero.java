@@ -15,8 +15,8 @@ public class Hero extends Character implements SpecialAbility {
      * @param attack  la force d'attaque du héros
      * @param defense la défense du héros
      */
-    public Hero(String name, int hp, int attack, int defense) {
-        super(name, hp, attack, defense);
+    public Hero(String name, int hp, int attack, int defense, int speed) {
+        super(name, hp, attack, defense, speed);
         this.specialAbilityUsed = false;
     }
 
