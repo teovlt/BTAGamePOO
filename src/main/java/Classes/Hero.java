@@ -1,5 +1,5 @@
-package src.Classes;
-import src.Interfaces.SpecialAbility;
+package Classes;
+import Interfaces.SpecialAbility;
 
 /**
  * Classe représentant le héros du jeu.
@@ -26,15 +26,6 @@ public class Hero extends Character implements SpecialAbility {
         System.out.println("mettre le choix de capacité spéciale ici");
     }
 
-    @Override
-    public void activate(Character user, Character target) {
-        if (specialAbilityUsed) {
-            System.out.println("Capacité spéciale déjà utilisée.");
-            return;
-        }
-        //TODO
-    }
-
     /**
      * Réinitialise l'utilisation de la capacité spéciale (à appeler au début d'un niveau).
      */
@@ -43,4 +34,11 @@ public class Hero extends Character implements SpecialAbility {
     }
 
 
+    @Override
+    public void activate(Character user, Character target) {
+        if (specialAbilityUsed) {
+            System.out.println("Capacité spéciale déjà utilisée.");
+            return;
+        }
+    }
 }

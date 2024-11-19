@@ -1,6 +1,7 @@
-package src.Interfaces;
+package Interfaces;
 
-import src.Classes.Character;
+import Classes.Character;
+
 public interface SpecialAbility {
     /**
      * Active la capacité spéciale.

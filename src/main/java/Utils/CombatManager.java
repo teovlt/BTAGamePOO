@@ -1,8 +1,7 @@
-package src.utils;
+package Utils;
 
-import src.Classes.Character;
-import src.Classes.Enemy;
-import src.Classes.Hero;
+import Classes.Enemy;
+import Classes.Hero;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class CombatManager {
      * @param hero    le héros qui combat
      * @param enemies la liste des ennemis
      */
-    public static void handleCombat(Character hero, List<Enemy> enemies) {
+    public static void handleCombat(Hero hero, List<Enemy> enemies) {
         System.out.println("Un combat commence !");
         while (!hero.isDead() && !enemies.isEmpty()) {
 

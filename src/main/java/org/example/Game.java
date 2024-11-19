@@ -1,7 +1,7 @@
-package src;
+package org.example;
 
-import src.Classes.Enemy;
-import src.utils.EnemyFactory;
+import Classes.Enemy;
+import Utils.EnemyFactory;
 
 import java.util.ArrayList;
 

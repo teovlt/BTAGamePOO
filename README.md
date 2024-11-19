@@ -1,2 +1,2 @@
 # BTAGamePOO
-src.Game in java (beat them all)
+src.org.example.Game in java (beat them all)

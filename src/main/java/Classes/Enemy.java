@@ -1,4 +1,4 @@
-package src.Classes;
+package Classes;
 
 public class Enemy extends Character {
 
@@ -16,7 +16,7 @@ public class Enemy extends Character {
 
     @Override
     public void attack(Character target) {
-        //TODO
+
     }
 
 }

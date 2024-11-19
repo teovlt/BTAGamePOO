@@ -1,6 +1,6 @@
-package src.utils;
+package Utils;
 
-import src.Classes.Enemy;
+import Classes.Enemy;
 
 import java.util.ArrayList;
 import java.util.List;
