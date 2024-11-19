@@ -22,7 +22,8 @@ public class Hero extends Character implements SpecialAbility {
 
     @Override
     public void attack(Character target) {
-        //TODO
+        System.out.println("attack");
+        System.out.println("mettre le choix de capacité spéciale ici");
     }
 
     @Override

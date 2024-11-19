@@ -1,5 +1,10 @@
 package src;
 
+import src.Classes.Enemy;
+import src.utils.EnemyFactory;
+
+import java.util.ArrayList;
+
 public class Game {
 
     public static void main(String[] args) {
@@ -19,6 +24,11 @@ public class Game {
     private static void launchGame() {
         //lancer la boucle du jeu
         System.out.println("je lance le jeu");
+        ArrayList<Enemy> badGuys = new ArrayList<>(EnemyFactory.generateEnemyGroup(4));
+        for (Enemy badGuy: badGuys
+             ) {
+            System.out.println(badGuy);
+        }
     }
 
 

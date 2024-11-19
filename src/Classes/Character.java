@@ -82,6 +82,13 @@ public abstract class Character {
 
     @Override
     public String toString() {
-        return String.format("%s [HP: %d, Attack: %d, Defense: %d, Speed : %d]", name, hp, attack, defense, speed);
+        return "============================\n" +
+                "| Nom      : " + String.format("%-12s", name) + " |\n" +
+                "| HP       : " + String.format("%-12d", hp) + " |\n" +
+                "| Attaque  : " + String.format("%-12d", attack) + " |\n" +
+                "| Défense  : " + String.format("%-12d", defense) + " |\n" +
+                "| Vitesse  : " + String.format("%-12d", speed) + " |\n" +
+                "============================ \n";
     }
+
 }
