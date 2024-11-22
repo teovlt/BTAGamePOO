@@ -45,10 +45,10 @@ public class Game {
 
     private void launchGame() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Je chois la carte" +
-                "Carte 1 : Facile" +
-                "Carte 2 : Difficulté Moyenne" +
-                "Carte 3 : Difficile" +
+        System.out.println("Je chois la carte " +
+                "Carte 1 : Facile, " +
+                "Carte 2 : Difficulté Moyenne, " +
+                "Carte 3 : Difficile. " +
                 "Veuillez saisir 1, 2 ou 3 ");
         this.numCarte = sc.nextInt();
         System.out.println("Vous avez choisi la carte : " + numCarte);
