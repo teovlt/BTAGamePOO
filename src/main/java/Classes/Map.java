@@ -1,9 +1,9 @@
 package Classes;
 
 public class Map {
-    int rows;
-    int columns;
-    Enemy[][] map;
+    private int rows;
+    private int columns;
+    private Enemy[][] map;
 
     public Map(int rows, int columns) {
         this.rows = rows;
@@ -44,16 +44,20 @@ public class Map {
     }
 
     public void printMap() {
+        String horizontalBorder = " " + "-".repeat(columns * 4 + 1);
+
+        System.out.println(horizontalBorder);
+
         for (int i = 0; i < rows; i++) {
+            StringBuilder rowBuilder = new StringBuilder("|");
+
             for (int j = 0; j < columns; j++) {
-                if (map[i][j] == null) {
-                    System.out.print("- ");
-                } else {
-                    System.out.print(map[i][j] + " ");
-                }
+                String cellContent = (map[i][j] == null) ? "   " : " E ";
+                rowBuilder.append(cellContent).append("|");
             }
-            System.out.println();
+
+            System.out.println(rowBuilder);
+            System.out.println(horizontalBorder);
         }
     }
-
 }
