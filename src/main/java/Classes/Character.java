@@ -17,6 +17,7 @@ public abstract class Character {
      * @param hp      les points de vie du personnage
      * @param attack  la force d'attaque du personnage
      * @param defense la défense du personnage
+     * @param speed   la vitesse du personnage
      */
     public Character(String name, int hp, int attack, int defense, int speed) {
         this.name = name;

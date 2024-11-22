@@ -1,15 +1,6 @@
 package Classes;
 
 public class Enemy extends Character {
-
-    /**
-     * Constructeur de la classe Ennemy.
-     *
-     * @param name    le nom de l'ennemi
-     * @param hp      les points de vie de l'ennemie
-     * @param attack  la force d'attaque de l'ennemie
-     * @param defense la défense de l'ennemi
-     */
     public Enemy(String name, int hp, int attack, int defense, int speed) {
         super(name, hp, attack, defense, speed);
     }
@@ -20,7 +11,19 @@ public class Enemy extends Character {
     }
     @Override
     public void attack(Character target) {
+        System.out.printf("%s attaque %s !\n", this.getName(), target.getName());
 
+        // Calcul des dégâts infligés
+        int damage = Math.max(0, this.getAttack() - target.getDefense());
+        target.setHp(target.getHp() - damage);
+
+        // Affichage du résultat
+        System.out.printf("%s inflige %d dégâts à %s.\n", this.getName(), damage, target.getName());
+
+        // Vérification si la cible est morte
+        if (target.isDead()) {
+            System.out.printf("%s a été vaincu par %s !\n", target.getName(), this.getName());
+        }
     }
 
 

@@ -2,6 +2,7 @@ package org.example;
 
 import Classes.Difficulty;
 import Classes.Enemy;
+import Classes.Hero;
 import Classes.Map;
 import Utils.EnemyFactory;
 
@@ -9,17 +10,16 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Game {
-    private String playerName; // Nom du joueur
     private List<Enemy> enemies; // Liste des ennemis générés
     private Map map; // Carte du jeu
+    private Hero hero; // Joueur
 
     public static void main(String[] args) {
         credits();
         Game game = new Game();
         game.askPlayerName();
-        game.launchGame();
+        game.chooseDifficulty();
         game.placeEnemiesOnMap();
-        game.printMap();
     }
 
     private static void credits() {
@@ -38,14 +38,16 @@ public class Game {
     private void askPlayerName() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Veuillez entrer votre nom : ");
-        this.playerName = sc.nextLine();
-        System.out.println("Bienvenue, " + playerName + " !");
+        // Nom du joueur
+        String playerName = sc.nextLine();
+        hero = new Hero(playerName, 10, 10, 10, 10, 0, 0);
+        System.out.println("Bienvenue " + hero.getName());
     }
 
     /**
      * Lancement du jeu avec choix de la difficulté.
      */
-    private void launchGame() {
+    private void chooseDifficulty() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Choisissez le niveau de difficulté : \n" +
                 "1. Facile (Carte petite, peu d'ennemis)\n" +
@@ -94,13 +96,6 @@ public class Game {
 
             map.setEnemy(enemy, row, column);
         }
-    }
-
-    /**
-     * Affiche la carte du jeu.
-     */
-    private void printMap() {
-        System.out.println("\nVoici la carte du jeu :");
         map.printMap();
     }
 }
