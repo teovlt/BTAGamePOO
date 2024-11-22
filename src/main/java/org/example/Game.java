@@ -45,7 +45,7 @@ public class Game {
 
     private void launchGame() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Je chois la carte " +
+        System.out.println("Je choisi la carte " +
                 "Carte 1 : Facile, " +
                 "Carte 2 : Difficulté Moyenne, " +
                 "Carte 3 : Difficile. " +
