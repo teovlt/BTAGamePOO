@@ -15,8 +15,14 @@ public class Enemy extends Character {
     }
 
     @Override
+    public String toString() {
+        return getName().charAt(0) + ""; // Affiche la première lettre du nom
+    }
+    @Override
     public void attack(Character target) {
 
     }
+
+
 
 }
