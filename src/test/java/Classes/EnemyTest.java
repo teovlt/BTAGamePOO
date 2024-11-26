@@ -14,7 +14,7 @@ class EnemyTest {
     @AfterEach
     void tearDown() {
     }
-//Hell
+//Hello
     @Test
     void getName() {
     }
