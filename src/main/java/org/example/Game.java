@@ -13,6 +13,8 @@ public class Game {
     private List<Enemy> enemies; // Liste des ennemis générés
     private Map map; // Carte du jeu
     private Hero hero; // Joueur
+    private int[] newPosition;
+
 
     public static void main(String[] args) {
         credits();
@@ -20,6 +22,7 @@ public class Game {
         game.askPlayerName();
         game.chooseDifficulty();
         game.placeEnemiesOnMap();
+        game.move();
     }
 
     private static void credits() {
@@ -96,6 +99,39 @@ public class Game {
 
             map.setEnemy(enemy, row, column);
         }
+    }
+
+    private static void clearScreen() {
+        for (int i = 0; i < 30; i++) {
+            System.out.println();
+        }
+    }
+
+    private void move(){
+        Scanner scanner = new Scanner(System.in);
+        map.setHero(hero, 0, 0);// position démarrage
         map.printMap();
+        while (true) {
+            System.out.println("Utilisez les flèches (N/S/L/R) pour déplacer le personnage :");
+            String input = scanner.nextLine().toUpperCase();
+            switch (input) {
+                case "N":
+                    newPosition = hero.moveHero(-1, 0, map.getRows(), map.getColumns());
+                    break;
+                case "S":
+                    newPosition = hero.moveHero(1, 0, map.getRows(), map.getColumns()); break;
+                case "L":
+                    newPosition = hero.moveHero(0, -1, map.getRows(), map.getColumns()); break;
+                case "R":
+                    newPosition = hero.moveHero(0, 1, map.getRows(), map.getColumns()); break;
+                default: System.out.println("Commande invalide !");
+                clearScreen();
+            }
+            map.setHero(hero, newPosition[0], newPosition[1]);
+            map.printMap();
+
+        }
     }
 }
+
+

@@ -3,12 +3,13 @@ package Classes;
 public class Map {
     private int rows;
     private int columns;
-    private Enemy[][] map;
+    private Character[][] map;
+
 
     public Map(int rows, int columns) {
         this.rows = rows;
         this.columns = columns;
-        this.map = new Enemy[rows][columns];
+        this.map = new Character[rows][columns];
     }
 
     public int getRows() {
@@ -27,7 +28,7 @@ public class Map {
         this.columns = columns;
     }
 
-    public Enemy[][] getMap() {
+    public Character[][] getMap() {
         return map;
     }
 
@@ -43,6 +44,27 @@ public class Map {
         }
     }
 
+    public void setHero(Hero hero, int row, int column) {
+        // Si la position précédente est différente de la nouvelle position, effacer l'ancienne position
+        if (hero.posPrec()[0] != row || hero.posPrec()[1] != column) {
+            this.map[hero.posPrec()[0]][hero.posPrec()[1]] = null; // Effacer la position précédente
+        }
+
+        // Si la case cible est vide, on déplace le héros
+        if (map[row][column] == null) {
+            this.map[row][column] = hero;
+            hero.setX(row); // Mettre à jour les coordonnées du héros
+            hero.setY(column);
+        } else {
+            System.out.println("Position déjà occupée, mouvement annulé !");
+        }
+    }
+
+
+
+
+
+
     public void printMap() {
         String horizontalBorder = " " + "-".repeat(columns * 4 + 1);
 
@@ -50,9 +72,18 @@ public class Map {
 
         for (int i = 0; i < rows; i++) {
             StringBuilder rowBuilder = new StringBuilder("|");
+            String cellContent;
 
             for (int j = 0; j < columns; j++) {
-                String cellContent = (map[i][j] == null) ? "   " : " E ";
+                if (map[i][j] == null) {
+                    cellContent = "   ";  // Case vide
+                } else if (map[i][j] instanceof Hero) {
+                    Hero hero = (Hero) map[i][j];  // Cast pour accéder aux informations du héros
+                    cellContent = " " + hero.getName().charAt(0) + " ";  // Affichage du héros par son premier caractère
+                } else {
+                    cellContent = " E ";  // Affichage d'un ennemi ou autre objet
+                }
+
                 rowBuilder.append(cellContent).append("|");
             }
 
@@ -60,4 +91,7 @@ public class Map {
             System.out.println(horizontalBorder);
         }
     }
+
+
 }
+

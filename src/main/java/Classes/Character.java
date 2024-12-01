@@ -80,7 +80,6 @@ public abstract class Character {
         return this.hp <= 0;
     }
 
-
     @Override
     public String toString() {
         return "============================\n" +

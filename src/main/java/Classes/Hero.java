@@ -13,8 +13,8 @@ public class Hero extends Character implements SpecialAbility {
     private boolean specialAbilityUsed;
     public Hero(String name, int hp, int attack, int defense, int speed, int x, int y) {
         super(name, hp, attack, defense, speed);
-        this.x = x;
-        this.y = y;
+        this.x = 0;
+        this.y = 0;
         this.specialAbilityUsed = false;
     }
 
@@ -59,6 +59,23 @@ public class Hero extends Character implements SpecialAbility {
         this.specialAbilityUsed = true;
     }
 
+    public int[] posPrec(){
+        return new int []{x,y};
+    }
+
+    public int[] moveHero(int rowVariation, int columnVariation, int rowMap, int colMap) {
+        int newX = this.x + rowVariation;
+        int newY = this.y + columnVariation;
+
+        // Vérification des limites de la carte
+        if (newX >= 0 && newX < rowMap && newY >= 0 && newY < colMap) {
+            x = newX;  // Mettre à jour la position du héros
+            y = newY;
+        }
+        return new int[]{x, y};  // Retourner la nouvelle position du héros
+    }
+
+
     public int getX() {
         return x;
     }
@@ -74,4 +91,6 @@ public class Hero extends Character implements SpecialAbility {
     public void setY(int y) {
         this.y = y;
     }
+
+
 }
