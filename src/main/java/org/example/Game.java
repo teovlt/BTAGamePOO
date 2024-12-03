@@ -4,6 +4,7 @@ import Classes.Difficulty;
 import Classes.Enemy;
 import Classes.Hero;
 import Classes.Map;
+import Utils.CombatManager;
 import Utils.EnemyFactory;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class Game {
         System.out.println("Veuillez entrer votre nom : ");
         // Nom du joueur
         String playerName = sc.nextLine();
-        hero = new Hero(playerName, 10, 10, 10, 10, 0, 0);
+        hero = new Hero(playerName, 50, 24, 8, 10, 0, 0);
         System.out.println("Bienvenue " + hero.getName());
     }
 
@@ -90,48 +91,104 @@ public class Game {
      * Place les ennemis sur des positions aléatoires sur la carte.
      */
     private void placeEnemiesOnMap() {
+        int heroStartRow = 0; // Ligne de départ du héros
+        int heroStartColumn = 0; // Colonne de départ du héros
+
         for (Enemy enemy : enemies) {
             int row, column;
             do {
                 row = (int) (Math.random() * map.getRows());
                 column = (int) (Math.random() * map.getColumns());
-            } while (map.getMap()[row][column] != null); // S'assurer que la case est libre
+            } while (
+                    map.getMap()[row][column] != null || // Vérifier que la case est vide
+                            (row == heroStartRow && column == heroStartColumn) // Vérifier qu'on n'est pas sur la case de départ
+            );
 
             map.setEnemy(enemy, row, column);
         }
     }
 
-    private static void clearScreen() {
-        for (int i = 0; i < 30; i++) {
-            System.out.println();
-        }
-    }
 
-    private void move(){
+    private void move() {
         Scanner scanner = new Scanner(System.in);
-        map.setHero(hero, 0, 0);// position démarrage
+        map.setHero(hero, 0, 0); // Position de départ du héros
         map.printMap();
-        while (true) {
-            System.out.println("Utilisez les flèches (N/S/L/R) pour déplacer le personnage :");
-            String input = scanner.nextLine().toUpperCase();
-            switch (input) {
-                case "N":
-                    newPosition = hero.moveHero(-1, 0, map.getRows(), map.getColumns());
-                    break;
-                case "S":
-                    newPosition = hero.moveHero(1, 0, map.getRows(), map.getColumns()); break;
-                case "L":
-                    newPosition = hero.moveHero(0, -1, map.getRows(), map.getColumns()); break;
-                case "R":
-                    newPosition = hero.moveHero(0, 1, map.getRows(), map.getColumns()); break;
-                default: System.out.println("Commande invalide !");
-                clearScreen();
-            }
-            map.setHero(hero, newPosition[0], newPosition[1]);
-            map.printMap();
 
+        while (true) {
+            System.out.println("Utilisez les flèches (Z/Q/S/D) pour déplacer le personnage :");
+            String input = scanner.nextLine().toUpperCase();
+
+            // Stockage temporaire des nouvelles coordonnées
+            int[] newCoordinates = {hero.getX(), hero.getY()};
+
+            switch (input) {
+                case "Z": // Haut
+                    newCoordinates[0]--; // Diminue la ligne
+                    break;
+                case "S": // Bas
+                    newCoordinates[0]++; // Augmente la ligne
+                    break;
+                case "Q": // Gauche
+                    newCoordinates[1]--; // Diminue la colonne
+                    break;
+                case "D": // Droite
+                    newCoordinates[1]++; // Augmente la colonne
+                    break;
+                default:
+                    System.out.println("Commande invalide !");
+                    continue; // Relance le tour sans modifier l'état
+            }
+
+            // Vérifie si les nouvelles coordonnées sont valides
+            if (!isValidPosition(newCoordinates)) {
+                System.out.println("Vous ne pouvez pas sortir de la carte !");
+                continue; // Ignore le déplacement
+            }
+
+            // Met à jour la carte : enlève le héros de l'ancienne position et le place à la nouvelle
+            map.clearHero(hero.getX(), hero.getY());
+            hero.setX(newCoordinates[0]); // Met à jour les coordonnées du héros
+            hero.setY(newCoordinates[1]);
+            map.setHero(hero, hero.getX(), hero.getY());
+
+            // Vérifie si le joueur tombe sur un ennemi
+            Enemy enemy = map.getEnemy(hero.getX(), hero.getY());
+            if (enemy != null) {
+                System.out.println("Un ennemi apparaît : " + enemy.getName() + " !");
+                CombatManager.handleDuel(hero, enemy);
+                if (hero.isDead()) {
+                    System.out.println("Vous avez été vaincu. Fin du jeu.");
+                    break;
+                }
+
+                // Si l'ennemi est vaincu, il est retiré de la carte
+                map.clearEnemy(hero.getX(), hero.getY());
+                enemies.remove(enemy);
+                System.out.println("Ennemi vaincu !");
+                map.setHero(hero, hero.getX(), hero.getY());
+
+            }
+                map.printMap();
+
+            // Condition de victoire : plus aucun ennemi sur la carte
+            if (enemies.isEmpty() ) {
+                System.out.println("Félicitations ! Vous avez vaincu tous les ennemis !");
+                break;
+            }
         }
     }
+
+    /**
+     * Vérifie si la position donnée est valide (dans les limites de la carte).
+     *
+     * @param position tableau [row, column]
+     * @return true si la position est valide, sinon false
+     */
+    private boolean isValidPosition(int[] position) {
+        return position[0] >= 0 && position[0] < map.getRows() &&
+                position[1] >= 0 && position[1] < map.getColumns();
+    }
+
 }
 
 

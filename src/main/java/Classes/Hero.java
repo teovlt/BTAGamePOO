@@ -33,18 +33,36 @@ public class Hero extends Character implements SpecialAbility {
             System.out.println("2. Capacité spéciale");
         }
 
-        int choice = sc.nextInt();
+        int choice = -1;
+
+        // Boucle pour assurer une entrée valide
+        while (choice < 1 || choice > 2 || (choice == 2 && this.specialAbilityUsed)) {
+            System.out.print("Votre choix : ");
+            if (sc.hasNextInt()) {
+                choice = sc.nextInt();
+                if (choice == 2 && this.specialAbilityUsed) {
+                    System.out.println("Capacité spéciale déjà utilisée. Choisissez une autre option.");
+                }
+            } else {
+                System.out.println("Entrée invalide. Veuillez entrer un nombre (1 ou 2).");
+                sc.next(); // Consomme l'entrée invalide
+            }
+        }
 
         if (choice == 2) {
-            activate(this, target);
+            activate(this, target); // Utilise la capacité spéciale
         } else {
+            // Calcul des dégâts de l'attaque normale
             int damage = Math.max(0, this.getAttack() - target.getDefense());
             target.setHp(target.getHp() - damage);
             System.out.printf("%s attaque %s pour %d dégâts.\n", this.getName(), target.getName(), damage);
         }
 
+        // Vérifie si la cible est morte
         if (target.isDead()) {
-            System.out.println("L'ennemi " + target.getName() + " est mort sous vos coups !");
+            System.out.println("L'ennemi " + target.getName() + " a été vaincu !");
+        }else{
+            System.out.println("Il reste " + target.getHp() + " à " + target.getName());
         }
     }
 
@@ -56,25 +74,13 @@ public class Hero extends Character implements SpecialAbility {
         }
 
         // Utilisation de la capacité spéciale
+        System.out.println("NON IMPLEMENTE");
         this.specialAbilityUsed = true;
     }
 
     public int[] posPrec(){
         return new int []{x,y};
     }
-
-    public int[] moveHero(int rowVariation, int columnVariation, int rowMap, int colMap) {
-        int newX = this.x + rowVariation;
-        int newY = this.y + columnVariation;
-
-        // Vérification des limites de la carte
-        if (newX >= 0 && newX < rowMap && newY >= 0 && newY < colMap) {
-            x = newX;  // Mettre à jour la position du héros
-            y = newY;
-        }
-        return new int[]{x, y};  // Retourner la nouvelle position du héros
-    }
-
 
     public int getX() {
         return x;
@@ -91,6 +97,7 @@ public class Hero extends Character implements SpecialAbility {
     public void setY(int y) {
         this.y = y;
     }
+
 
 
 }

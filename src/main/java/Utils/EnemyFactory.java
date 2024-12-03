@@ -27,11 +27,11 @@ public class EnemyFactory {
             case "Brigand":
                 return new Enemy("Brigand", 50, 10, 5, 5);
             case "Catcheur":
-                return new Enemy("Catcheur", 150, 8, 10, 3);
+                return new Enemy("Catcheur", 150, 9, 10, 3);
             case "Gangster":
                 return new Enemy("Gangster", 40, 12, 4, 7);
             default:
-                return new Enemy("Ennemi Inconnu", 30, 5, 2, 4);
+                return new Enemy("Ennemi Inconnu", 30, 10, 2, 4);
         }
     }
 

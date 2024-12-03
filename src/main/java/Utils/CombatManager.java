@@ -4,6 +4,7 @@ import Classes.Enemy;
 import Classes.Hero;
 
 import java.util.List;
+import java.util.Comparator;
 
 public class CombatManager {
 
@@ -15,18 +16,57 @@ public class CombatManager {
      */
     public static void handleCombat(Hero hero, List<Enemy> enemies) {
         System.out.println("Un combat commence !");
+
         while (!hero.isDead() && !enemies.isEmpty()) {
+            // Tri des ennemis et du héros par ordre de vitesse
+            enemies.sort(Comparator.comparingInt(Enemy::getSpeed).reversed());
 
-            // Personnage le plus rapide attaque en premier
-            // Si la cible est morte stop
-            // Sinon cible attaque ensuie
+            // Combat du héros contre chaque ennemi
+            for (int i = 0; i < enemies.size(); i++) {
+                Enemy enemy = enemies.get(i);
 
+                if (hero.getSpeed() >= enemy.getSpeed()) {
+                    // Le héros attaque en premier
+                    System.out.println(hero.getName() + " attaque " + enemy.getName() + " !");
+                    hero.attack(enemy);
 
-            if (hero.isDead()) {
-                System.out.println("Le héros a été vaincu. Partie terminée.");
-            } else {
-                System.out.println("Tous les ennemis ont été vaincus !");
+                    if (enemy.isDead()) {
+                        System.out.println(enemy.getName() + " est vaincu !");
+                        enemies.remove(i);
+                        i--; // Ajuste l'index pour continuer correctement la boucle
+                        continue;
+                    }
+
+                    // L'ennemi riposte
+                    System.out.println(enemy.getName() + " riposte !");
+                    enemy.attack(hero);
+                } else {
+                    // L'ennemi attaque en premier
+                    System.out.println(enemy.getName() + " attaque " + hero.getName() + " !");
+                    enemy.attack(hero);
+
+                    if (hero.isDead()) {
+                        System.out.println("Le héros a été vaincu. Partie terminée.");
+                        return;
+                    }
+
+                    // Le héros riposte
+                    System.out.println(hero.getName() + " riposte !");
+                    hero.attack(enemy);
+
+                    if (enemy.isDead()) {
+                        System.out.println(enemy.getName() + " est vaincu !");
+                        enemies.remove(i);
+                        i--; // Ajuste l'index pour continuer correctement la boucle
+                    }
+                }
             }
+        }
+
+        if (hero.isDead()) {
+            System.out.println("Le héros a été vaincu. Partie terminée.");
+        } else {
+            System.out.println("Tous les ennemis ont été vaincus !");
         }
     }
 
@@ -37,19 +77,39 @@ public class CombatManager {
      * @param enemy l'ennemi
      */
     public static void handleDuel(Hero hero, Enemy enemy) {
-        System.out.println("Le duel commence entre " + hero.getName() + " et " + enemy.getName() + " !");
-        System.out.println(hero);
-        System.out.println(enemy);
+        System.out.println("Le duel commence entre " + hero.getName() +"("+ enemy.getHp()+") et " + enemy.getName() + "("+ enemy.getHp()+") !");
 
-        // Boucle de combat
         while (!hero.isDead() && !enemy.isDead()) {
-           //Same
+            if (hero.getSpeed() >= enemy.getSpeed()) {
+                // Le héros attaque en premier
+                System.out.println(hero.getName() + " attaque " + enemy.getName() + " !");
+                hero.attack(enemy);
 
+                if (enemy.isDead()) {
+                    System.out.println(enemy.getName() + " est vaincu !");
+                    break;
+                }
 
+                // L'ennemi riposte
+                System.out.println(enemy.getName() + " riposte !");
+                enemy.attack(hero);
+            } else {
+                // L'ennemi attaque en premier
+                System.out.println(enemy.getName() + " attaque " + hero.getName() + " !");
+                enemy.attack(hero);
 
-            // Vérifie si le héros est mort
-            if (hero.isDead()) {
-                System.out.println(hero.getName() + " a été vaincu...");
+                if (hero.isDead()) {
+                    System.out.println(hero.getName() + " a été vaincu...");
+                    break;
+                }
+
+                // Le héros riposte
+                System.out.println(hero.getName() + " riposte !");
+                hero.attack(enemy);
+
+                if (enemy.isDead()) {
+                    System.out.println(enemy.getName() + " est vaincu !");
+                }
             }
         }
     }
