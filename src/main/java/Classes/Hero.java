@@ -11,6 +11,15 @@ public class Hero extends Character implements SpecialAbility {
     private int x; // Position du joueur sur la carte (ligne)
     private int y; // Position du joueur sur la carte (colonne)
     private boolean specialAbilityUsed;
+    private int choice = -1;
+
+    public int getChoice() {
+        return choice;
+    }
+
+    public void setChoice(int choice) {
+        this.choice = choice;
+    }
 
     public Hero(String name, int hp, int attack, int defense, int speed, int x, int y) {
         super(name, hp, attack, defense, speed);
@@ -35,7 +44,6 @@ public class Hero extends Character implements SpecialAbility {
         }
         System.out.println(" ----------------------------\n");
 
-        int choice = -1;
 
         // Boucle pour assurer une entrée valide
         while (choice < 1 || choice > 2 || (choice == 2 && this.specialAbilityUsed)) {

@@ -1,5 +1,6 @@
 package Classes;
 
+import Utils.CombatManager;
 import org.junit.jupiter.api.Test;
 
 import org.junit.jupiter.api.Test;
@@ -8,17 +9,18 @@ import static org.junit.jupiter.api.Assertions.*;
 class GameTest {
 
     @Test
-    void testHeroAttackEnemy () {
+    void testHeroDiesBeforeGoal() {
         // Arrange
-        Hero attacker = new Hero("Attacker", 50, 10, 5,4,5,6);
-        Enemy target = new Enemy("Target", 30, 8, 4,7);
+        Hero hero = new Hero("TestHero", 10, 24, 8, 10, 0, 0);
+        Enemy enemy = new Enemy("StrongEnemy", 50, 30, 8, 15);
 
         // Act
-        attacker.attack(target);
+        while (!hero.isDead() && !enemy.isDead()) {
+            CombatManager.handleDuel(hero, enemy);
+        }
 
         // Assert
-        int expectedHp = 30 - 10 ; // dégâts infligés = attaque - défense
-        assertEquals(expectedHp, target.getHp(), "HP de la cible après une attaque normale incorrect.");
+        assertTrue(hero.isDead(), "Hero should be dead");
     }
 
     @Test
@@ -35,31 +37,61 @@ class GameTest {
         assertEquals(expectedHp, hero.getHp(), "Les points de vie du héros après l'attaque sont incorrects.");
     }
 
-//    @Test
-//    void testAttackSpecialAbility() {
-//        // Arrange
-//        Character attacker = new Hero("Attacker", 50, 10, 5,4,5,6);
-//        Character target = new Enemy("Target", 30, 8, 4,3);
-//
-//        // Simulez un effet spécial en modifiant votre méthode activate() si nécessaire
-//        attacker.attack(target);
-//
-//        // Assert
-//        // Ici, ajoutez des assertions spécifiques à ce que "activate" fait.
-//        assertTrue(target.getHp() < 30, "HP de la cible n'a pas diminué après capacité spéciale.");
-//    }
+    @Test
+    void testHeroStartsOnMap() {
+        Hero hero = new Hero("TestHero", 50, 24, 8, 10, 0, 0);
+        Map map = new Map(5, 5);
+        map.setHero(hero, 0, 0);
+
+        assertEquals(hero, map.getMap()[0][0], "Hero should be at position (0,0)");
+    }
 
     @Test
-    void testTargetDeath() {
+    void testEnemyPlacementOnMap() {
+        Map map = new Map(5, 5);
+        Enemy enemy = new Enemy("Enemy", 10, 20, 8, 5);
+        map.setEnemy(enemy, 1, 1);
+
+        assertEquals(enemy, map.getMap()[1][1], "Enemy should be at position (1,1)");
+    }
+
+    @Test
+    void testHeroNormalAttack() {
         // Arrange
-        Character target = new Hero("Attacker", 50, 20, 5,3,4,7);
-        Character attacker = new Enemy("Target", 10, 55, 4,7);
+        Hero hero = new Hero("TestHero", 25, 20, 5, 10, 0, 0); // Attaque = 20
+        Enemy enemy = new Enemy("TestEnemy", 20, 15, 5, 5);    // Ennemi avec 20 HP
+
+        hero.setChoice(1); // Choisir attaque normale
 
         // Act
-        attacker.attack(target);
+        hero.attack(enemy);
+        enemy.attack(hero);
+        hero.attack(enemy);
 
         // Assert
-        assertTrue(target.isDead(), "La cible aurait dû être morte après l'attaque.");
+        assertTrue(enemy.getHp() <= 0, "Enemy HP should be 0 or less");  // Vérifie que l'ennemi a 0 PV ou moins
+        assertTrue(enemy.isDead(), "Enemy should be dead");              // Vérifie que l'ennemi est mort
+    }
+
+    @Test
+    void testHeroSpecialAttack() {
+        // Arrange
+        Hero hero = new Hero("TestHero", 25, 20, 5, 10, 0, 0); // Attaque = 20
+        Enemy enemy = new Enemy("TestEnemy", 20, 10, 5, 5);    // Ennemi avec 20 HP
+
+        hero.setChoice(2); // Choisir attaque spéciale
+
+        // Act
+        hero.attack(enemy);
+        enemy.attack(hero);
+        hero.setChoice(1);
+        hero.attack(enemy);
+        enemy.attack(hero);
+        hero.setChoice(1);
+        hero.attack(enemy);
+        // Assert
+        assertTrue(enemy.getHp() <= 0, "Enemy HP should be 0 or less after special attack"); // Vérifie que l'ennemi a 0 PV ou moins
+        assertTrue(enemy.isDead(), "Enemy should be dead after special attack");             // Vérifie que l'ennemi est mort
     }
 
 }
