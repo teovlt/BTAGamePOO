@@ -77,7 +77,7 @@ public class CombatManager {
      * @param enemy l'ennemi
      */
     public static void handleDuel(Hero hero, Enemy enemy) {
-        System.out.println("Le duel commence entre " + hero.getName() +"("+ enemy.getHp()+") et " + enemy.getName() + "("+ enemy.getHp()+") !");
+        System.out.println("Le duel commence entre " + hero.getName() +"("+ hero.getHp()+") et " + enemy.getName() + "("+ enemy.getHp()+") !");
 
         while (!hero.isDead() && !enemy.isDead()) {
             if (hero.getSpeed() >= enemy.getSpeed()) {

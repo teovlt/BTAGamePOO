@@ -14,8 +14,6 @@ public class Game {
     private List<Enemy> enemies; // Liste des ennemis générés
     private Map map; // Carte du jeu
     private Hero hero; // Joueur
-    private int[] newPosition;
-
 
     public static void main(String[] args) {
         credits();
@@ -23,7 +21,7 @@ public class Game {
         game.askPlayerName();
         game.chooseDifficulty();
         game.placeEnemiesOnMap();
-        game.move();
+        game.start();
     }
 
     private static void credits() {
@@ -109,13 +107,13 @@ public class Game {
     }
 
 
-    private void move() {
+    private void start() {
         Scanner scanner = new Scanner(System.in);
         map.setHero(hero, 0, 0); // Position de départ du héros
         map.printMap();
 
         while (true) {
-            System.out.println("Utilisez les flèches (Z/Q/S/D) pour déplacer le personnage :");
+            System.out.println("Utilisez les touches (Z/Q/S/D) pour déplacer le personnage :");
             String input = scanner.nextLine().toUpperCase();
 
             // Stockage temporaire des nouvelles coordonnées
@@ -171,7 +169,7 @@ public class Game {
                 map.printMap();
 
             // Condition de victoire : plus aucun ennemi sur la carte
-            if (enemies.isEmpty() ) {
+            if (enemies.isEmpty()) {
                 System.out.println("Félicitations ! Vous avez vaincu tous les ennemis !");
                 break;
             }
