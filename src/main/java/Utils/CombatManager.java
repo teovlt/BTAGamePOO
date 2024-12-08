@@ -93,7 +93,13 @@ public class CombatManager {
                 // L'ennemi riposte
                 System.out.println(enemy.getName() + " riposte !");
                 enemy.attack(hero);
-            } else {
+
+                if (hero.isDead()) {
+                    System.out.println(hero.getName() + " est vaincu, vous battez en retraite...");
+                    break;
+                }
+            }
+            else {
                 // L'ennemi attaque en premier
                 System.out.println(enemy.getName() + " attaque " + hero.getName() + " !");
                 enemy.attack(hero);

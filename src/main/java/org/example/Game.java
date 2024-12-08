@@ -83,6 +83,8 @@ public class Game {
         this.enemies = EnemyFactory.generateEnemyGroup(difficulty.getEnemyCount());
 
         System.out.println("Vous avez choisi la difficulté : " + difficulty.name());
+        System.out.println("Votre but est maintenant de tuer tous les ennemis pour gagner ! \n");
+        System.out.println("Bonne chance ;)");
     }
 
     /**
@@ -113,7 +115,7 @@ public class Game {
         map.printMap();
 
         while (true) {
-            System.out.println("Utilisez les touches (Z/Q/S/D) pour déplacer le personnage :");
+            System.out.println("Utilisez les touches (Z/Q/S/D) pour déplacer le personnage ("+ hero.getName().charAt(0)+") :");
             String input = scanner.nextLine().toUpperCase();
 
             // Stockage temporaire des nouvelles coordonnées
@@ -155,7 +157,7 @@ public class Game {
                 System.out.println("Un ennemi apparaît : " + enemy.getName() + " !");
                 CombatManager.handleDuel(hero, enemy);
                 if (hero.isDead()) {
-                    System.out.println("Vous avez été vaincu. Fin du jeu.");
+                    System.out.println("GAME OVER !!");
                     break;
                 }
 

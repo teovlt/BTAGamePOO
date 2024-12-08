@@ -81,10 +81,10 @@ public class Map {
                 hero.setX(row);
                 hero.setY(column);
             } else if (map[row][column] instanceof Enemy) {
-                System.out.println("Un ennemi est présent à cette position !");
+                // System.out.println("Un ennemi est présent à cette position !");
                 // Vous pouvez ajouter ici une logique pour gérer le combat
             } else {
-                System.out.println("Position déjà occupée par un autre objet !");
+                // System.out.println("Position déjà occupée par un autre objet !");
             }
         } else {
             System.out.println("Position invalide !");

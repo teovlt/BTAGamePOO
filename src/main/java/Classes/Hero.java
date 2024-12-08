@@ -11,6 +11,7 @@ public class Hero extends Character implements SpecialAbility {
     private int x; // Position du joueur sur la carte (ligne)
     private int y; // Position du joueur sur la carte (colonne)
     private boolean specialAbilityUsed;
+
     public Hero(String name, int hp, int attack, int defense, int speed, int x, int y) {
         super(name, hp, attack, defense, speed);
         this.x = 0;
@@ -27,11 +28,12 @@ public class Hero extends Character implements SpecialAbility {
     public void attack(Character target) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("\n--- Attaque ---");
-        System.out.println("1. Attaque normale");
+        System.out.println("\n ---- Choix de l'attaque ----");
+        System.out.println(" |  1. Attaque normale      |");
         if (!this.specialAbilityUsed) {
-            System.out.println("2. Capacité spéciale");
+        System.out.println(" |  2. Capacité spéciale    |");
         }
+        System.out.println(" ----------------------------\n");
 
         int choice = -1;
 
@@ -57,13 +59,7 @@ public class Hero extends Character implements SpecialAbility {
             target.setHp(target.getHp() - damage);
             System.out.printf("%s attaque %s pour %d dégâts.\n", this.getName(), target.getName(), damage);
         }
-
-        // Vérifie si la cible est morte
-        if (target.isDead()) {
-            System.out.println("L'ennemi " + target.getName() + " a été vaincu !");
-        }else{
-            System.out.println("Il reste " + target.getHp() + " à " + target.getName());
-        }
+        System.out.println("Il reste " + target.getHp() + " à " + target.getName());
     }
 
     @Override
@@ -78,8 +74,8 @@ public class Hero extends Character implements SpecialAbility {
         this.specialAbilityUsed = true;
     }
 
-    public int[] posPrec(){
-        return new int []{x,y};
+    public int[] posPrec() {
+        return new int[]{x, y};
     }
 
     public int getX() {
@@ -97,7 +93,6 @@ public class Hero extends Character implements SpecialAbility {
     public void setY(int y) {
         this.y = y;
     }
-
 
 
 }
