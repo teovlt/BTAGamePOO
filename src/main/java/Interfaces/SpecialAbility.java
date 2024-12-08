@@ -8,6 +8,6 @@ public interface SpecialAbility {
      *
      * @param target la cible de la capacité (peut être null selon la capacité)
      */
-    void activate(Character target);
+    void activate(Character user,Character target);
 }
 

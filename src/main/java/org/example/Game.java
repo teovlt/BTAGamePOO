@@ -1,5 +1,8 @@
 package org.example;
 
+import Characters.Healer;
+import Characters.Tank;
+import Characters.Warrior;
 import Classes.Difficulty;
 import Classes.Enemy;
 import Classes.Hero;
@@ -44,9 +47,56 @@ public class Game {
         Scanner sc = new Scanner(System.in);
         System.out.println("Veuillez entrer votre nom : ");
         String playerName = sc.nextLine();
-        hero = new Hero(playerName, 50, 24, 8, 10, 0, 0);
-        System.out.println("Bienvenue " + hero.getName() + "!");
+        System.out.println("Bienvenue " + playerName + "!");
+        this.hero = chooseCharacter();
+        hero.setName(playerName);
     }
+    /**
+     * Permet au joueur de choisir un personnage
+     * @return un personnage choisi par le joueur
+     */
+    public static Hero chooseCharacter() {
+        Scanner scanner = new Scanner(System.in);
+        Hero chosenCharacter = null;
+
+        // Boucle jusqu'à ce que le joueur fasse un choix valide
+        while (chosenCharacter == null) {
+            System.out.println("Choisissez votre personnage:");
+            System.out.println("1. Guerrier");
+            System.out.println("2. Soigneur");
+            System.out.println("3. Tank");
+            System.out.print("Entrez le numéro de votre choix: ");
+
+            int choice = -1;
+
+            // Vérifier si l'entrée est un nombre entier
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
+            } else {
+                // Si l'entrée n'est pas un entier, vider le buffer et indiquer l'erreur
+                System.out.println("Entrée invalide. Veuillez entrer un numéro valide.");
+                scanner.next(); // Consomme l'entrée invalide
+            }
+
+            switch (choice) {
+                case 1:
+                    chosenCharacter = new Warrior();
+                    break;
+                case 2:
+                    chosenCharacter = new Healer();
+                    break;
+                case 3:
+                    chosenCharacter = new Tank();
+                    break;
+                default:
+                    System.out.println("Choix invalide. Veuillez essayer à nouveau.");
+                    break;
+            }
+        }
+
+        return chosenCharacter;
+    }
+
 
     /**
      * Permet au joueur de choisir un niveau de difficulté, configure la carte

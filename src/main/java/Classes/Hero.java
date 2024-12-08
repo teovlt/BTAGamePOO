@@ -1,5 +1,6 @@
 package Classes;
 
+import Abilities.Rage;
 import Classes.Character;
 import Interfaces.SpecialAbility;
 
@@ -13,11 +14,13 @@ import java.util.Scanner;
  * Il a également une position sur une carte représentée par des coordonnées (x, y).
  * </p>
  */
-public class Hero extends Character implements SpecialAbility {
+public class Hero extends Character {
 
     private int x; // Position du joueur sur la carte (ligne)
     private int y; // Position du joueur sur la carte (colonne)
     private boolean specialAbilityUsed; // Indique si la capacité spéciale a été utilisée
+
+    private SpecialAbility specialAbility;
 
     /**
      * Constructeur de la classe Hero.
@@ -30,12 +33,14 @@ public class Hero extends Character implements SpecialAbility {
      * @param x       la position initiale en x (ligne)
      * @param y       la position initiale en y (colonne)
      */
-    public Hero(String name, int hp, int attack, int defense, int speed, int x, int y) {
+    public Hero(String name, int hp, int attack, int defense, int speed, int x, int y, SpecialAbility specialAbility) {
         super(name, hp, attack, defense, speed);
         this.x = 0; // Par défaut, position initiale (0, 0)
         this.y = 0;
         this.specialAbilityUsed = false;
+        this.specialAbility = specialAbility;
     }
+
 
     /**
      * Retourne une chaîne de caractères représentant le héros.
@@ -85,7 +90,7 @@ public class Hero extends Character implements SpecialAbility {
         }
 
         if (choice == 2) {
-            this.activate(target); // Utilise la capacité spéciale
+            activateSpecialAbility(target); // Utilise la capacité spéciale
         } else {
             // Calcul des dégâts de l'attaque normale
             int damage = Math.max(0, this.getAttack() - target.getDefense());
@@ -104,15 +109,19 @@ public class Hero extends Character implements SpecialAbility {
      *
      * @param target la cible de la capacité spéciale
      */
-    @Override
-    public void activate(Character target) {
+    public void activateSpecialAbility(Character target) {
         if (specialAbilityUsed) {
             System.out.println("Capacité spéciale déjà utilisée.");
             return;
         }
+        System.out.println(this.getAttack());
+        specialAbility.activate(this,target);
+        System.out.println(this.getAttack());
 
-        // Utilisation de la capacité spéciale
-        System.out.println("NON IMPLEMENTÉ");
+        int damage = Math.max(0, this.getAttack() - target.getDefense());
+        target.setHp(target.getHp() - damage);
+        System.out.printf("%s attaque %s pour %d dégâts.\n", this.getName(), target.getName(), damage);
+
         this.specialAbilityUsed = true;
     }
 
