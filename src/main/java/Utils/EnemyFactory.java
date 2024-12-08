@@ -8,13 +8,15 @@ import java.util.Random;
 
 public class EnemyFactory {
 
-
     private static final Random random = new Random();
 
     /**
-     * Génère un ennemi aléatoire.
+     * Génère un ennemi aléatoire avec des caractéristiques variées.
      *
-     * @return une instance d'ennemi
+     * Cette méthode choisit aléatoirement un type d'ennemi parmi plusieurs
+     * possibilités et initialise ses caractéristiques (points de vie, attaque, défense, etc.).
+     *
+     * @return une instance d'ennemi générée aléatoirement
      */
     public static Enemy generateRandomEnemy() {
         // Types d'ennemis et leurs caractéristiques
@@ -35,12 +37,15 @@ public class EnemyFactory {
         }
     }
 
-
     /**
-     * Génère une liste d'ennemis pour un segment de la carte.
+     * Génère un groupe d'ennemis pour un segment de la carte.
+     *
+     * Cette méthode crée une liste d'ennemis en appelant la méthode
+     * {@link #generateRandomEnemy()} un certain nombre de fois,
+     * en fonction du paramètre count.
      *
      * @param count le nombre d'ennemis à générer
-     * @return une liste d'ennemis
+     * @return une liste d'ennemis générés aléatoirement
      */
     public static List<Enemy> generateEnemyGroup(int count) {
         List<Enemy> enemies = new ArrayList<>();

@@ -24,6 +24,9 @@ public class Game {
         game.start();
     }
 
+    /**
+     * Affiche les crédits du jeu.
+     */
     private static void credits() {
         System.out.println("\n");
         System.out.println("----------------------------------------");
@@ -35,19 +38,19 @@ public class Game {
     }
 
     /**
-     * Demande au joueur d'entrer son nom.
+     * Demande au joueur d'entrer son nom et initialise le héros.
      */
     private void askPlayerName() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Veuillez entrer votre nom : ");
-        // Nom du joueur
         String playerName = sc.nextLine();
         hero = new Hero(playerName, 50, 24, 8, 10, 0, 0);
-        System.out.println("Bienvenue " + hero.getName());
+        System.out.println("Bienvenue " + hero.getName() + "!");
     }
 
     /**
-     * Lancement du jeu avec choix de la difficulté.
+     * Permet au joueur de choisir un niveau de difficulté, configure la carte
+     * et génère les ennemis en fonction de ce choix.
      */
     private void chooseDifficulty() {
         Scanner sc = new Scanner(System.in);
@@ -78,7 +81,6 @@ public class Game {
             }
         }
 
-        // Configuration de la carte et des ennemis selon la difficulté choisie
         this.map = new Map(difficulty.getMapSize(), difficulty.getMapSize());
         this.enemies = EnemyFactory.generateEnemyGroup(difficulty.getEnemyCount());
 
@@ -108,50 +110,49 @@ public class Game {
         }
     }
 
-
+    /**
+     * Démarre la boucle principale du jeu. Gère les déplacements du joueur
+     * et les interactions avec les ennemis.
+     */
     private void start() {
         Scanner scanner = new Scanner(System.in);
         map.setHero(hero, 0, 0); // Position de départ du héros
         map.printMap();
 
         while (true) {
-            System.out.println("Utilisez les touches (Z/Q/S/D) pour déplacer le personnage ("+ hero.getName().charAt(0)+") :");
+            System.out.println("Utilisez les touches (Z/Q/S/D) pour déplacer le personnage (" + hero.getName().charAt(0) + ") :");
             String input = scanner.nextLine().toUpperCase();
 
-            // Stockage temporaire des nouvelles coordonnées
             int[] newCoordinates = {hero.getX(), hero.getY()};
 
             switch (input) {
                 case "Z": // Haut
-                    newCoordinates[0]--; // Diminue la ligne
+                    newCoordinates[0]--;
                     break;
                 case "S": // Bas
-                    newCoordinates[0]++; // Augmente la ligne
+                    newCoordinates[0]++;
                     break;
                 case "Q": // Gauche
-                    newCoordinates[1]--; // Diminue la colonne
+                    newCoordinates[1]--;
                     break;
                 case "D": // Droite
-                    newCoordinates[1]++; // Augmente la colonne
+                    newCoordinates[1]++;
                     break;
                 default:
                     System.out.println("Commande invalide !");
-                    continue; // Relance le tour sans modifier l'état
+                    continue;
             }
 
-            // Vérifie si les nouvelles coordonnées sont valides
             if (!isValidPosition(newCoordinates)) {
                 System.out.println("Vous ne pouvez pas sortir de la carte !");
-                continue; // Ignore le déplacement
+                continue;
             }
 
-            // Met à jour la carte : enlève le héros de l'ancienne position et le place à la nouvelle
             map.clearHero(hero.getX(), hero.getY());
-            hero.setX(newCoordinates[0]); // Met à jour les coordonnées du héros
+            hero.setX(newCoordinates[0]);
             hero.setY(newCoordinates[1]);
             map.setHero(hero, hero.getX(), hero.getY());
 
-            // Vérifie si le joueur tombe sur un ennemi
             Enemy enemy = map.getEnemy(hero.getX(), hero.getY());
             if (enemy != null) {
                 System.out.println("Un ennemi apparaît : " + enemy.getName() + " !");
@@ -161,16 +162,13 @@ public class Game {
                     break;
                 }
 
-                // Si l'ennemi est vaincu, il est retiré de la carte
                 map.clearEnemy(hero.getX(), hero.getY());
                 enemies.remove(enemy);
                 System.out.println("Ennemi vaincu !");
                 map.setHero(hero, hero.getX(), hero.getY());
-
             }
-                map.printMap();
+            map.printMap();
 
-            // Condition de victoire : plus aucun ennemi sur la carte
             if (enemies.isEmpty()) {
                 System.out.println("Félicitations ! Vous avez vaincu tous les ennemis !");
                 break;
@@ -179,16 +177,13 @@ public class Game {
     }
 
     /**
-     * Vérifie si la position donnée est valide (dans les limites de la carte).
+     * Vérifie si une position donnée est valide sur la carte.
      *
-     * @param position tableau [row, column]
-     * @return true si la position est valide, sinon false
+     * @param position Tableau contenant les coordonnées [ligne, colonne]
+     * @return true si la position est dans les limites, sinon false
      */
     private boolean isValidPosition(int[] position) {
         return position[0] >= 0 && position[0] < map.getRows() &&
                 position[1] >= 0 && position[1] < map.getColumns();
     }
-
 }
-
-
