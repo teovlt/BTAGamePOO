@@ -114,9 +114,7 @@ public class Hero extends Character {
             System.out.println("Capacité spéciale déjà utilisée.");
             return;
         }
-        System.out.println(this.getAttack());
         specialAbility.activate(this,target);
-        System.out.println(this.getAttack());
 
         int damage = Math.max(0, this.getAttack() - target.getDefense());
         target.setHp(target.getHp() - damage);
