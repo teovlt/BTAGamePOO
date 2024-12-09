@@ -27,13 +27,13 @@ public class EnemyFactory {
 
         switch (type) {
             case "Brigand":
-                return new Enemy("Brigand", 50, 10, 5, 5);
+                return new Enemy("Brigand", 60, 15, 8, 6);
             case "Catcheur":
-                return new Enemy("Catcheur", 150, 8, 10, 3);
+                return new Enemy("Catcheur", 120, 20, 12, 4);
             case "Gangster":
-                return new Enemy("Gangster", 40, 12, 4, 7);
+                return new Enemy("Gangster", 80, 18, 10, 7);
             default:
-                return new Enemy("Ennemi Inconnu", 30, 10, 2, 4);
+                return new Enemy("Ennemi Inconnu", 50, 10, 5, 5);
         }
     }
 
