@@ -10,27 +10,63 @@ import Classes.Map;
 import Utils.CombatManager;
 import Utils.EnemyFactory;
 
-import java.util.List;
-import java.util.Scanner;
+import java.io.IOException;
+import java.util.*;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+/**
+ * Classe principale représentant le jeu.
+ * Gère la configuration initiale, le déroulement du jeu, et l'interaction entre le héros et les ennemis.
+ */
 public class Game {
     private List<Enemy> enemies; // Liste des ennemis générés
     private Map map; // Carte du jeu
     private Hero hero; // Joueur
 
+    private static final Logger logger = Logger.getLogger(Game.class.getName());
+
+    /**
+     * Point d'entrée principal du jeu.
+     *
+     * @param args Arguments en ligne de commande (non utilisés ici).
+     */
     public static void main(String[] args) {
-        credits();
+        catchLog();
+        logger.info("Démarrage du jeu");
         Game game = new Game();
+        game.credits();
         game.askPlayerName();
         game.chooseDifficulty();
         game.placeEnemiesOnMap();
         game.start();
+        logger.info("Fin du jeu");
+    }
+
+    /**
+     * Initialise le gestionnaire de logs pour écrire dans un fichier.
+     */
+    private static void catchLog() {
+        try {
+            FileHandler fileHandler = new FileHandler("./log.txt", true);
+            fileHandler.setLevel(Level.ALL);
+            fileHandler.setFormatter(new java.util.logging.SimpleFormatter());
+            logger.addHandler(fileHandler);
+            logger.setLevel(Level.ALL);
+            logger.setUseParentHandlers(false);
+            logger.info("Logger initialisé avec succès");
+        } catch (IOException | SecurityException e) {
+            e.printStackTrace();
+            logger.severe("Erreur lors de l'initialisation du logger : " + e.getMessage());
+        }
     }
 
     /**
      * Affiche les crédits du jeu.
      */
-    private static void credits() {
+    private void credits() {
+        logger.info("Affichage des crédits du jeu");
         System.out.println("\n");
         System.out.println("----------------------------------------");
         System.out.println("|                                      |");
@@ -41,25 +77,31 @@ public class Game {
     }
 
     /**
-     * Demande au joueur d'entrer son nom et initialise le héros.
+     * Demande le nom du joueur et configure son personnage.
      */
     private void askPlayerName() {
+        logger.info("Demande du nom du joueur");
         Scanner sc = new Scanner(System.in);
         System.out.println("Veuillez entrer votre nom : ");
         String playerName = sc.nextLine();
+        logger.info("Nom du joueur saisi : " + playerName);
+
         System.out.println("Bienvenue " + playerName + "!");
         this.hero = chooseCharacter();
         hero.setName(playerName);
+        logger.info("Personnage choisi : " + hero.getClass().getSimpleName());
     }
+
     /**
-     * Permet au joueur de choisir un personnage
-     * @return un personnage choisi par le joueur
+     * Permet au joueur de choisir un personnage parmi les options disponibles.
+     *
+     * @return Le personnage choisi par le joueur.
      */
     public static Hero chooseCharacter() {
         Scanner scanner = new Scanner(System.in);
         Hero chosenCharacter = null;
+        logger.info("Début du choix du personnage");
 
-        // Boucle jusqu'à ce que le joueur fasse un choix valide
         while (chosenCharacter == null) {
             System.out.println("Choisissez votre personnage:");
             System.out.println("1. Guerrier");
@@ -69,82 +111,85 @@ public class Game {
 
             int choice = -1;
 
-            // Vérifier si l'entrée est un nombre entier
             if (scanner.hasNextInt()) {
                 choice = scanner.nextInt();
             } else {
-                // Si l'entrée n'est pas un entier, vider le buffer et indiquer l'erreur
                 System.out.println("Entrée invalide. Veuillez entrer un numéro valide.");
-                scanner.next(); // Consomme l'entrée invalide
+                scanner.next();
+                continue;
             }
 
             switch (choice) {
                 case 1:
                     chosenCharacter = new Warrior();
+                    logger.info("Personnage Guerrier choisi");
                     break;
                 case 2:
                     chosenCharacter = new Healer();
+                    logger.info("Personnage Soigneur choisi");
                     break;
                 case 3:
                     chosenCharacter = new Tank();
+                    logger.info("Personnage Tank choisi");
                     break;
                 default:
                     System.out.println("Choix invalide. Veuillez essayer à nouveau.");
-                    break;
+                    logger.warning("Choix invalide du joueur : " + choice);
             }
         }
 
         return chosenCharacter;
     }
 
-
     /**
-     * Permet au joueur de choisir un niveau de difficulté, configure la carte
-     * et génère les ennemis en fonction de ce choix.
+     * Permet au joueur de choisir un niveau de difficulté, qui détermine la taille de la carte et le nombre d'ennemis.
      */
     private void chooseDifficulty() {
+        logger.info("Demande du choix de la difficulté");
         Scanner sc = new Scanner(System.in);
         System.out.println("Choisissez le niveau de difficulté : \n" +
                 "1. Facile (Carte petite, peu d'ennemis)\n" +
                 "2. Moyen (Carte moyenne, ennemis modérés)\n" +
                 "3. Difficile (Grande carte, beaucoup d'ennemis)");
 
-        int difficultyChoice = -1;
         Difficulty difficulty = null;
 
         while (difficulty == null) {
             System.out.print("Votre choix (1, 2 ou 3) : ");
-            difficultyChoice = sc.nextInt();
+            int difficultyChoice = sc.nextInt();
 
             switch (difficultyChoice) {
                 case 1:
                     difficulty = Difficulty.EASY;
+                    logger.info("Difficulté choisie : Facile");
                     break;
                 case 2:
                     difficulty = Difficulty.MEDIUM;
+                    logger.info("Difficulté choisie : Moyen");
                     break;
                 case 3:
                     difficulty = Difficulty.HARD;
+                    logger.info("Difficulté choisie : Difficile");
                     break;
                 default:
                     System.out.println("Choix invalide. Veuillez réessayer.");
+                    logger.warning("Choix de difficulté invalide : " + difficultyChoice);
             }
         }
 
         this.map = new Map(difficulty.getMapSize(), difficulty.getMapSize());
         this.enemies = EnemyFactory.generateEnemyGroup(difficulty.getEnemyCount());
-
-        System.out.println("Vous avez choisi la difficulté : " + difficulty.name());
-        System.out.println("Votre but est maintenant de tuer tous les ennemis pour gagner ! \n");
-        System.out.println("Bonne chance ;)");
+        logger.info("Carte créée avec une taille de " + map.getRows() + "x" + map.getColumns());
+        logger.info("Nombre d'ennemis générés : " + enemies.size());
     }
 
     /**
-     * Place les ennemis sur des positions aléatoires sur la carte.
+     * Place les ennemis générés aléatoirement sur la carte.
      */
     private void placeEnemiesOnMap() {
-        int heroStartRow = 0; // Ligne de départ du héros
-        int heroStartColumn = 0; // Colonne de départ du héros
+        logger.info("Placement des ennemis sur la carte");
+        int heroStartRow = 0;
+        int heroStartColumn = 0;
 
         for (Enemy enemy : enemies) {
             int row, column;
@@ -152,21 +197,23 @@ public class Game {
                 row = (int) (Math.random() * map.getRows());
                 column = (int) (Math.random() * map.getColumns());
             } while (
-                    map.getMap()[row][column] != null || // Vérifier que la case est vide
-                            (row == heroStartRow && column == heroStartColumn) // Vérifier qu'on n'est pas sur la case de départ
+                    map.getMap()[row][column] != null ||
+                            (row == heroStartRow && column == heroStartColumn)
             );
 
             map.setEnemy(enemy, row, column);
+            logger.info("Ennemi " + enemy.getName() + " placé en position (" + row + ", " + column + ")");
         }
     }
 
     /**
-     * Démarre la boucle principale du jeu. Gère les déplacements du joueur
-     * et les interactions avec les ennemis.
+     * Lance la boucle principale du jeu. Gère les déplacements du héros, les rencontres avec les ennemis,
+     * et les interactions principales.
      */
     private void start() {
+        logger.info("Démarrage du jeu principal");
         Scanner scanner = new Scanner(System.in);
-        map.setHero(hero, 0, 0); // Position de départ du héros
+        map.setHero(hero, 0, 0);
         map.printMap();
 
         while (true) {
@@ -176,25 +223,20 @@ public class Game {
             int[] newCoordinates = {hero.getX(), hero.getY()};
 
             switch (input) {
-                case "Z": // Haut
-                    newCoordinates[0]--;
-                    break;
-                case "S": // Bas
-                    newCoordinates[0]++;
-                    break;
-                case "Q": // Gauche
-                    newCoordinates[1]--;
-                    break;
-                case "D": // Droite
-                    newCoordinates[1]++;
-                    break;
+                case "Z": newCoordinates[0]--; break;
+                case "S": newCoordinates[0]++; break;
+                case "Q": newCoordinates[1]--; break;
+                case "D": newCoordinates[1]++; break;
                 default:
                     System.out.println("Commande invalide !");
+                    logger.warning("Commande invalide : " + input);
                     continue;
             }
 
             if (!isValidPosition(newCoordinates)) {
                 System.out.println("Vous ne pouvez pas sortir de la carte !");
+                logger.warning("Tentative de sortie de la carte en position : " +
+                        newCoordinates[0] + "," + newCoordinates[1]);
                 continue;
             }
 
@@ -202,18 +244,22 @@ public class Game {
             hero.setX(newCoordinates[0]);
             hero.setY(newCoordinates[1]);
             map.setHero(hero, hero.getX(), hero.getY());
+            logger.info("Héros déplacé en position : " + hero.getX() + "," + hero.getY());
 
             Enemy enemy = map.getEnemy(hero.getX(), hero.getY());
             if (enemy != null) {
                 System.out.println("Un ennemi apparaît : " + enemy.getName() + " !");
+                logger.info("Combat initié avec l'ennemi : " + enemy.getName());
                 CombatManager.handleDuel(hero, enemy);
                 if (hero.isDead()) {
                     System.out.println("GAME OVER !!");
+                    logger.severe("Héros mort. Fin du jeu.");
                     break;
                 }
 
                 map.clearEnemy(hero.getX(), hero.getY());
                 enemies.remove(enemy);
+                logger.info("Ennemi " + enemy.getName() + " vaincu");
                 System.out.println("Ennemi vaincu !");
                 map.setHero(hero, hero.getX(), hero.getY());
             }
@@ -221,19 +267,20 @@ public class Game {
 
             if (enemies.isEmpty()) {
                 System.out.println("Félicitations ! Vous avez vaincu tous les ennemis !");
+                logger.info("Tous les ennemis ont été vaincus.");
                 break;
             }
         }
     }
 
     /**
-     * Vérifie si une position donnée est valide sur la carte.
+     * Vérifie si les coordonnées données sont valides (dans les limites de la carte).
      *
-     * @param position Tableau contenant les coordonnées [ligne, colonne]
-     * @return true si la position est dans les limites, sinon false
+     * @param coordinates Coordonnées [ligne, colonne] à vérifier.
+     * @return `true` si les coordonnées sont valides, `false` sinon.
      */
-    private boolean isValidPosition(int[] position) {
-        return position[0] >= 0 && position[0] < map.getRows() &&
-                position[1] >= 0 && position[1] < map.getColumns();
+    private boolean isValidPosition(int[] coordinates) {
+        return coordinates[0] >= 0 && coordinates[0] < map.getRows() &&
+                coordinates[1] >= 0 && coordinates[1] < map.getColumns();
     }
 }
